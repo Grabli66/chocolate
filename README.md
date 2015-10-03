@@ -97,7 +97,7 @@ get "/registration/success" do
   }
 end
 
-get "/user/:id/" do |req|
+get "/user/:id" do |req|
   user = Database.get_user(req.params["id"])
   user.to_json
 end
