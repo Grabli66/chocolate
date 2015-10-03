@@ -97,8 +97,13 @@ get "/registration/success" do
   }
 end
 
-post "/registration/:email/:password" do |req|
-  pp req.params["email"], req.params["password"]
+get "/user/:id/" do |req|
+  user = Database.get_user(req.params["id"])
+  user.to_json
+end
+
+post "/registration/singup" do |req|
+  Database.save_user(req.params["email"], req.params["password"])  
   redirect("/registration/success")
 end
 ```
