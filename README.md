@@ -10,7 +10,7 @@ Add this to your application's `shard.yml`:
 ```yaml
 dependencies:
   chocolate:
-    github: [your-github-name]/chocolate
+    github: Grabli66/chocolate
 ```
 
 
@@ -86,7 +86,7 @@ listen {
 
 ## Contributing
 
-1. Fork it ( https://github.com/[your-github-name]/zephyr/fork )
+1. Fork it ( https://github.com/Grabli66/chocolate/fork )
 2. Create your feature branch (git checkout -b my-new-feature)
 3. Commit your changes (git commit -am 'Add some feature')
 4. Push to the branch (git push origin my-new-feature)
@@ -94,4 +94,4 @@ listen {
 
 ## Contributors
 
-- [your-github-name](https://github.com/[your-github-name]) Grabli66 - creator, maintainer
+- Grabli66 (https://github.com/Grabli66) Grabli66 - creator, maintainer
