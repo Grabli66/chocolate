@@ -16,7 +16,7 @@ dependencies:
 
 ## Usage
 
-## Hello world
+### Hello world
 
 ```crystal
 require "chocolate"
@@ -32,7 +32,7 @@ listen {
 }
 ```
 
-## Hello with template
+### Hello with template
 
 ```crystal
 require "chocolate"
@@ -54,7 +54,7 @@ listen {
   post 8080
 }
 ```
-## Hello with view
+### Hello with view
 
 ```crystal
 require "chocolate"
@@ -83,6 +83,25 @@ listen {
 }
 ```
 
+### Handle params
+```crystal
+require "chocolate"
+include chocolate
+include zephyr
+
+get "/registration/success" do
+  html {
+    body {
+      div(css: "result", text: "Success")
+    }
+  }
+end
+
+post "/registration/:email/:password" do |req|
+  pp req.params["email"], req.params["password"]
+  redirect("/registration/success")
+end
+```
 
 ## Contributing
 

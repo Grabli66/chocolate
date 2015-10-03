@@ -6,4 +6,8 @@ class CommonTag < BaseTag
       with x yield x
     end
   end
+
+  def onclick(s)
+    add_attr("onclick", s)
+  end
 end
