@@ -12,7 +12,6 @@ class Handler < HTTP::Handler
 
   def call(request)
     resp = exec(request)
-    resp ? resp : HTTP::Response.new(404)
     resp || call_next(request)
   end
 
@@ -28,12 +27,12 @@ class Handler < HTTP::Handler
     elsif request.method == "POST"
       nod,pars = @postTree.find_path(path)
       if nod
-        resp = nod.val.not_nil!.call(PostRequest.new(request, pars.not_nil!))        
+        resp = nod.val.not_nil!.call(PostRequest.new(request, pars.not_nil!))
         return resp.to_response
       end
     end
     nil
-  end
+  end  
 
   # add route for get method
   def add_get(path, &block : BlockResponse)

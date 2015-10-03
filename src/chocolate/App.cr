@@ -15,6 +15,7 @@ class App
     handlers = [] of HTTP::Handler
     handlers << Handler::INSTANCE
     handlers << HTTP::StaticFileHandler.new(@static_dir.not_nil!) if @static_dir
+    handlers << ErrorHandler::INSTANCE
     server = HTTP::Server.new(@port, handlers)
     puts "Chocolate server is running"
     server.listen()

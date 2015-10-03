@@ -53,6 +53,10 @@ module Chocolate
     resp
   end
 
+  def error(code, &block : BlockResponse)
+    ErrorHandler::INSTANCE.add_error(code, &block)
+  end
+
   def ok(s : String)
     HTTP::Response.new(200, s)
   end

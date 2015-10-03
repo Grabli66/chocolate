@@ -5,13 +5,18 @@ class Request
   getter cookies
   getter content_type
 
-  def initialize(request : HTTP::Request, @params)
+  def initialize(request : HTTP::Request)
     @path = request.path.not_nil!
     @version = request.version
     @headers = request.headers
     @cookies = {} of String => String
     @content_type = request.headers["Content-type"]? || ""
-    @params ||= Hash(String, String).new
+    @params = Hash(String, String).new
+  end
+
+  def initialize(request : HTTP::Request, params)
+    initialize(request)
+    @params = params
   end
 
   # Adds parameters from param string

@@ -108,6 +108,38 @@ post "/registration/singup" do |req|
 end
 ```
 
+### Handle static files
+```crystal
+require "chocolate"
+include chocolate
+include zephyr
+
+listen {
+  post 8080
+  static_dir "./static"
+}
+```
+
+### Handle errors
+```crystal
+require "chocolate"
+include chocolate
+include zephyr
+
+error ERROR_NOT_FOUND do
+  html {
+    body {
+      h1(text: "NOT FOUND!")
+    }
+  }
+end
+
+listen {
+  post 8080  
+}
+```
+
+
 ## Contributing
 
 1. Fork it ( https://github.com/Grabli66/chocolate/fork )
