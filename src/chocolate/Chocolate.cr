@@ -60,4 +60,17 @@ module Chocolate
   def ok(s : String)
     HTTP::Response.new(200, s)
   end
+
+  def json(obj)
+    s = ""
+    if obj.is_a?(String)
+      s = obj
+    elsif obj.responds_to?(:to_json)
+      s = obj.to_json
+    end
+
+    resp = HTTP::Response.new(200, s)
+    resp.headers["Content-type"] = "application/json; charset=utf-8"
+    resp
+  end
 end

@@ -139,6 +139,32 @@ listen {
 }
 ```
 
+### JSON response
+```crystal
+require "chocolate"
+include chocolate
+include zephyr
+
+class User
+  json_mapping({
+    id => Int32,
+    name => String,
+    email => String
+  })
+
+  def initialize(@id, @name, @email)
+  end
+end
+
+get "/user/:id" do |req|
+  user = Database.get_user(req.params["id"])
+  json(user)
+end
+
+listen {
+  post 8080  
+}
+```
 
 ## Contributing
 
