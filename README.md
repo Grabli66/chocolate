@@ -97,9 +97,9 @@ get "/registration/success" do
   }
 end
 
-get "/user/:id" do |req|
-  user = Database.get_user(req.params["id"])
-  user.to_json
+get "/blog/:id" do |req|
+  blog = Database.get_blog(req.params["id"])
+  blog.to_s
 end
 
 post "/registration/singup" do |req|
