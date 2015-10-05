@@ -273,4 +273,26 @@ module CommonBuilder
   def textarea(id = "", css = "", rows = "", placeholder = "", required = false)
     textarea(id, css, rows, placeholder, required) {}
   end
+
+  def select(id = "", css = "", name = "", multiple = false, size = 3)
+    SelectTag.new(id, css, name, multiple, size) do |x|
+      add_child(x)
+      with x yield x
+    end
+  end
+
+  def select(id = "", css = "", name = "", multiple = false, size = 3)
+    select(id, css, name, multiple, size) {}
+  end
+
+  def option(id = "", css = "", text = "", value = "", selected = false, disabled = false)
+    OptionTag.new(id, css, text, value, selected, disabled) do |x|
+      add_child(x)
+      with x yield x
+    end
+  end
+
+  def option(id = "", css = "", text = "", value = "", selected = false, disabled = false)
+    option(id, css, text, value, selected, disabled) {}
+  end
 end
