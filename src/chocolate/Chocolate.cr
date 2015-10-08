@@ -1,9 +1,9 @@
 require "./*"
 require "../zephyr/**"
 
-alias BlockResponse = GetRequest | PostRequest -> HTTP::Response | BaseTag | View | String
+alias BlockResponse = GetRequest | PostRequest -> HTTP::Response | CommonTag | View | String
 
-class BaseTag
+class CommonTag
   def to_response
     ok(render)
   end
