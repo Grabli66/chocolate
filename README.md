@@ -42,7 +42,7 @@ include zephyr
 get "/" do
   html {
     head {
-      title("Hello world")      
+      title(text: "Hello world")      
     }    
     body {
       div(text: "Hello, world!")
@@ -65,7 +65,7 @@ class HelloView
   def render
     html {
       head {
-        title("Hello world")      
+        title(text: "Hello world")      
       }    
       body {
         div(text: "Hello, world!")
