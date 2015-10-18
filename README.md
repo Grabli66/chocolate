@@ -181,6 +181,79 @@ listen {
 }
 ```
 
+### View inheritance
+
+```crystal
+require "chocolate"
+
+include Zephyr
+include Chocolate
+
+abstract class RootView < View
+  abstract def render_content
+
+  def render
+    html {
+      head {
+        title(text: @title)
+      }
+      body {
+        header {
+          ul(css: "menu") {
+            li(text: "Home") {
+              css_add("active") if @location == :home
+            }
+            li(text: "Blog") {
+              css_add("active") if @location == :blog
+            }
+          }
+        }
+
+        include_element(render_content)
+      }
+    }
+  end
+end
+
+class HomeView < RootView
+  def initialize
+    @title = "Home"
+    @location = :home
+  end
+
+  def render_content
+    div(css: "home") {
+      h1(text: "HOME")
+    }
+  end
+end
+
+class BlogView < RootView
+  def initialize
+    @title = "Blog"
+    @location = :blog
+  end
+
+  def render_content
+    div(css: "blog") {
+      h1(text: "Blog")
+    }
+  end
+end
+
+get "/" do
+  HomeView.new
+end
+
+get "/blog" do
+  BlogView.new
+end
+
+listen {
+  port 8080
+}
+```
+
 ## Contributing
 
 1. Fork it ( https://github.com/Grabli66/chocolate/fork )
