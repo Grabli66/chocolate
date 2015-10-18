@@ -57,8 +57,10 @@ module Chocolate
     ErrorHandler::INSTANCE.add_error(code, &block)
   end
 
-  def ok(s : String)
-    HTTP::Response.new(200, s)
+  def ok(s : String, content_type=nil)
+    resp = HTTP::Response.new(200, s)
+    resp.headers["Content-type"] = content_type if content_type
+    resp
   end
 
   def json(obj)

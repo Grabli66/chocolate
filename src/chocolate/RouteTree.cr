@@ -25,11 +25,15 @@ class RouteNode
   end
 
   def add_path(path, val)
-    p = path.split("/")
+    if path == "/"
+      pa = ["/"]
+    else
+      pa = path.split("/")
+    end
     c = [] of String
 
     nod = self
-    p.each do |x|
+    pa.each do |x|
       s = x
       if s.starts_with?(":")
         s = "*"
@@ -42,16 +46,19 @@ class RouteNode
   end
 
   def find_path(path)
-    p = path.split("/")
+    if path == "/"
+      pa = ["/"]
+    else
+      pa = path.split("/")
+    end
     nod = self
-    p.each do |x|
+    pa.each do |x|
       nd = nod.childs["*"]?
       nod = nd ? nd : nod.childs[x]?
       return nil,nil unless nod
       nod = nod.not_nil!
     end
-
-    return nod, nod.get_params(p)
+    return nod, nod.get_params(pa)
   end
 
   def get_params(comps)

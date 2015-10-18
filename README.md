@@ -16,19 +16,22 @@ dependencies:
 
 ## Usage
 
+Need latest crystal compiler to compile some samples.
+
 ### Hello world
 
 ```crystal
 require "chocolate"
-include chocolate
-include zephyr
+
+include Zephyr
+include Chocolate
 
 get "/" do
   "Hello, world!"
 end
 
 listen {
-  post 8080
+  port 8080
 }
 ```
 
@@ -36,8 +39,9 @@ listen {
 
 ```crystal
 require "chocolate"
-include chocolate
-include zephyr
+
+include Zephyr
+include Chocolate
 
 get "/" do
   html {
@@ -51,15 +55,16 @@ get "/" do
 end
 
 listen {
-  post 8080
+  port 8080
 }
 ```
 ### Hello with view
 
 ```crystal
 require "chocolate"
-include chocolate
-include zephyr
+
+include Zephyr
+include Chocolate
 
 class HelloView
   def render
@@ -79,15 +84,16 @@ get "/" do
 end
 
 listen {
-  post 8080
+  port 8080
 }
 ```
 
 ### Handle params
 ```crystal
 require "chocolate"
-include chocolate
-include zephyr
+
+include Zephyr
+include Chocolate
 
 get "/registration/success" do
   html {
@@ -115,7 +121,7 @@ include chocolate
 include zephyr
 
 listen {
-  post 8080
+  port 8080
   static_dir "./static"
 }
 ```
@@ -123,8 +129,9 @@ listen {
 ### Handle errors
 ```crystal
 require "chocolate"
-include chocolate
-include zephyr
+
+include Zephyr
+include Chocolate
 
 error ERROR_NOT_FOUND do
   html {
@@ -135,21 +142,29 @@ error ERROR_NOT_FOUND do
 end
 
 listen {
-  post 8080  
+  port 8080  
 }
 ```
 
 ### JSON response
 ```crystal
+require "json"
 require "chocolate"
-include chocolate
-include zephyr
+
+include Zephyr
+include Chocolate
+
+class Database
+  def self.get_user(id)
+    User.new(1, "John", "Doe")
+  end
+end
 
 class User
-  json_mapping({
-    id => Int32,
-    name => String,
-    email => String
+  JSON.mapping({
+    id: Int32,
+    name: String,
+    email: String
   })
 
   def initialize(@id, @name, @email)
@@ -157,12 +172,12 @@ class User
 end
 
 get "/user/:id" do |req|
-  user = Database.get_user(req.params["id"])
+  user = Database.get_user(req.params["id"] as String)
   json(user)
 end
 
 listen {
-  post 8080  
+  port 8080
 }
 ```
 

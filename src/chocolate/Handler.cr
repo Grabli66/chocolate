@@ -11,7 +11,11 @@ class Handler < HTTP::Handler
   end
 
   def call(request)
-    resp = exec(request)
+    begin
+      resp = exec(request)
+    rescue e
+      return ErrorHandler::INSTANCE.get_error_response(request, ERROR_INTERNAL)
+    end
     resp || call_next(request)
   end
 
@@ -19,7 +23,7 @@ class Handler < HTTP::Handler
     path = request.path.not_nil!
 
     if request.method == "GET"
-      nod,pars = @getTree.find_path(path)
+      nod,pars = @getTree.find_path(path)      
       if nod
         resp = nod.val.not_nil!.call(GetRequest.new(request, pars.not_nil!))
         return resp.to_response
@@ -32,7 +36,7 @@ class Handler < HTTP::Handler
       end
     end
     nil
-  end  
+  end
 
   # add route for get method
   def add_get(path, &block : BlockResponse)
