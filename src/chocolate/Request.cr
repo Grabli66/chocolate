@@ -7,6 +7,7 @@ class Request
 
   def initialize(request : HTTP::Request)
     @path = request.path.not_nil!
+    @query = request.query
     @version = request.version
     @headers = request.headers
     @cookies = {} of String => String
@@ -40,10 +41,8 @@ class GetRequest < Request
   end
 
   def parse_get()
-    items = @path.split("?")
-    return if items.size < 2
-    params_string = items[1]
-    add_params_from_string(params_string)
+    return unless @query
+    add_params_from_string(@query.not_nil!)
   end
 end
 

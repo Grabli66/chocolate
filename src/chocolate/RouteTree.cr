@@ -1,10 +1,12 @@
 class RouteNode
   @key = ""
   @components = [] of String
+  @group = nil
 
   getter key
   property val
   property components
+  property group
   getter childs
 
   def initialize(@key, @val)
@@ -24,7 +26,7 @@ class RouteNode
     @childs[k]?
   end
 
-  def add_path(path, val)
+  def add_path(path, val, group = nil)
     if path == "/"
       pa = ["/"]
     else
@@ -43,6 +45,7 @@ class RouteNode
     end
     nod.val = val
     nod.components = c
+    nod.group = group
   end
 
   def find_path(path)

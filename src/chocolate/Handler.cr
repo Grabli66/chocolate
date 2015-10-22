@@ -14,24 +14,33 @@ class Handler < HTTP::Handler
     begin
       resp = exec(request)
     rescue e
-      return ErrorHandler::INSTANCE.get_error_response(request, ERROR_INTERNAL)
+      return ExceptionHandler::INSTANCE.process_exception(request, e).to_response
     end
     resp || call_next(request)
   end
 
+  # process request
   def exec(request)
     path = request.path.not_nil!
 
     if request.method == "GET"
-      nod,pars = @getTree.find_path(path)      
+      nod,pars = @getTree.find_path(path)
       if nod
-        resp = nod.val.not_nil!.call(GetRequest.new(request, pars.not_nil!))
+        req = GetRequest.new(request, pars.not_nil!)
+        if nod.group
+          nod.group.not_nil!.before_block.not_nil!.call(req)
+        end
+        resp = nod.val.not_nil!.call(req)
         return resp.to_response
       end
     elsif request.method == "POST"
       nod,pars = @postTree.find_path(path)
       if nod
-        resp = nod.val.not_nil!.call(PostRequest.new(request, pars.not_nil!))
+        req = PostRequest.new(request, pars.not_nil!)
+        if nod.group
+          nod.group.not_nil!.before_block.not_nil!.call(req)
+        end
+        resp = nod.val.not_nil!.call(req)
         return resp.to_response
       end
     end
@@ -46,5 +55,10 @@ class Handler < HTTP::Handler
   # add route for post method
   def add_post(path, &block : BlockResponse)
     @postTree.add_path(path, block)
+  end
+
+  # add route for get method, for group
+  def add_get_group(group, path, &block : BlockResponse)
+    @getTree.add_path(path, block, group)
   end
 end
