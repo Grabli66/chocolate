@@ -77,14 +77,6 @@ module Chocolate
     resp
   end
 
-  def on_not_found(&block : BlockResponse)
-    NotFoundHandler::INSTANCE.add_handler(&block)
-  end
-
-  def on_internal_error(&block : BlockResponse)
-    InternalErrorHandler::INSTANCE.add_handler(&block)
-  end
-
   def on_exception(exception_type, &block : ExceptionBlockResponse)
     ExceptionHandler::INSTANCE.add_handler(exception_type, &block)
   end

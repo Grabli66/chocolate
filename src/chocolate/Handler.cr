@@ -13,38 +13,38 @@ class Handler < HTTP::Handler
   def call(request)
     begin
       resp = exec(request)
-    rescue e
+      resp || call_next(request)
+    rescue e            
       return ExceptionHandler::INSTANCE.process_exception(request, e).to_response
     end
-    resp || call_next(request)
   end
 
   # process request
   def exec(request)
     path = request.path.not_nil!
+    req = nil
+    nod = nil
+    pars = nil
 
     if request.method == "GET"
       nod,pars = @getTree.find_path(path)
-      if nod
-        req = GetRequest.new(request, pars.not_nil!)
-        if nod.group
-          nod.group.not_nil!.before_block.not_nil!.call(req)
-        end
-        resp = nod.val.not_nil!.call(req)
-        return resp.to_response
-      end
+      req = GetRequest.new(request, pars)
     elsif request.method == "POST"
       nod,pars = @postTree.find_path(path)
-      if nod
-        req = PostRequest.new(request, pars.not_nil!)
-        if nod.group
-          nod.group.not_nil!.before_block.not_nil!.call(req)
-        end
-        resp = nod.val.not_nil!.call(req)
-        return resp.to_response
-      end
+      req = PostRequest.new(request, pars)
+    else
+      nil
     end
-    nil
+
+    return nil unless req
+    return nil unless nod
+    return nil unless nod.val
+
+    if nod.group
+      nod.group.not_nil!.before_call(req)
+    end
+    resp = nod.val.not_nil!.call(req)
+    return resp.to_response
   end
 
   # add route for get method

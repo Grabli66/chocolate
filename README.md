@@ -133,12 +133,12 @@ require "chocolate"
 include Zephyr
 include Chocolate
 
-error ERROR_NOT_FOUND do
-  html {
-    body {
-      h1(text: "NOT FOUND!")
-    }
-  }
+on_exception ResourceNotFoundException do
+  "NOT FOUND"
+end
+
+on_exception Exception do
+  "INTERNAL ERROR"
 end
 
 listen {
@@ -254,6 +254,38 @@ listen {
 }
 ```
 
+### Route group
+```crystal
+require "../chocolate/src/**"
+
+include Chocolate
+include Zephyr
+
+class SessionNotFoundException < Exception
+end
+
+on_exception SessionNotFoundException do
+  "SESSION NOT FOUND"
+end
+
+group do
+  before do |req|
+    raise SessionNotFoundException.new unless req.params["session_id"]?
+  end
+
+  get "/user/:id" do |req|
+    req.params["id"] as String
+  end
+
+  get "/blog/:id" do |req|
+    req.params["id"] as String
+  end
+end
+
+listen {
+  port 8080
+}
+```
 ## Contributing
 
 1. Fork it ( https://github.com/Grabli66/chocolate/fork )

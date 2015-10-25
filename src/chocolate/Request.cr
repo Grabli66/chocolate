@@ -17,7 +17,7 @@ class Request
 
   def initialize(request : HTTP::Request, params)
     initialize(request)
-    @params = params
+    @params = params ? params.not_nil! : Hash(String, String).new
   end
 
   # Adds parameters from param string

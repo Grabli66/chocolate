@@ -1,3 +1,6 @@
+class ResourceNotFoundException < Exception
+end
+
 class ExceptionItem
   getter block
 
@@ -16,7 +19,14 @@ class ExceptionHandler
     if handler
       return handler.not_nil!.block.call
     end
-    InternalErrorHandler::INSTANCE.process(request)
+
+    # handles internal error exception
+    handler = @handlers["Exception"]?
+    if handler
+      return handler.not_nil!.block.call
+    end
+
+    error(500)
   end
 
   # adds handler for specific exception
